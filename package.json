@@ -11,6 +11,7 @@
     "url": "git+https://github.com/rgavril/homebridge-mqtt-fan-tasmota.git"
   },
   "keywords": [
+    "homebridge-plugin",
     "npm",
     "node",
     "homebridge-mqtt-fan-tasmota"
