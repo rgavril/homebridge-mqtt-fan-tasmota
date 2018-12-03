@@ -1,6 +1,6 @@
 {
   "name": "homebridge-mqtt-fan-tasmota",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Homebridge plugin for controlling the Fan part of a Itead Sonoff Ifan02 with Snonff-Tasmota Firmware over MQTT",
   "main": "index.js",
   "scripts": {
