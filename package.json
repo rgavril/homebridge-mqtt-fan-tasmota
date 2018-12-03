@@ -1,0 +1,30 @@
+{
+  "name": "homebridge-mqtt-fan-tasmota",
+  "version": "0.0.1",
+  "description": "Homebridge plugin for controlling the Fan part of a Itead Sonoff Ifan02 with Snonff-Tasmota Firmware over MQTT",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rgavril/homebridge-mqtt-fan-tasmota.git"
+  },
+  "keywords": [
+    "npm",
+    "node",
+    "homebridge-mqtt-fan-tasmota"
+  ],
+  "author": "Razvan Gavril",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rgavril/homebridge-mqtt-fan-tasmota/issues"
+  },
+  "homepage": "https://github.com/rgavril/homebridge-mqtt-fan-tasmota#readme"
+  "engines": {
+    "homebridge": ">=0.2.0"
+  },
+  "dependencies": {
+    "mqtt": "^1.12.0"
+  }
+}
