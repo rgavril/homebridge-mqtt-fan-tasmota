@@ -66,6 +66,7 @@ function MqttFanTasmotaAccessory(log, config) {
         }
     });
     this.client.subscribe(this.topicResultGet);
+    this.client.publish(this.topicFanspeedSet, '');
 }
 
 MqttFanTasmotaAccessory.prototype.getServices = function() {
