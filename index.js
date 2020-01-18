@@ -18,7 +18,8 @@ function MqttFanTasmotaAccessory(log, config) {
 
     this.state = {
         speed: 0,
-        power: false
+        power: false,
+        reachable: true
     };
 
     this.url = config['url'];
@@ -28,6 +29,7 @@ function MqttFanTasmotaAccessory(log, config) {
 
     this.topicFanspeedSet = 'cmnd/' + this.topic + '/fanspeed';
     this.topicResultGet = 'stat/' + this.topic + '/RESULT';
+    this.topicTeleLWT = 'tele/' + this.topic + '/LWT';
 
     this.client_Id = 'mqttjs_' + Math.random().toString(16).substr(2, 8);
     this.options = {
@@ -51,7 +53,6 @@ function MqttFanTasmotaAccessory(log, config) {
 
     this.client = mqtt.connect(this.url, this.options);
     this.client.on('message', function(topic, message) {
-
         if (topic == that.topicResultGet) {
             var data = {};
             try { data = JSON.parse(message); } catch(e) {}
@@ -64,9 +65,21 @@ function MqttFanTasmotaAccessory(log, config) {
                     that.fanService.getCharacteristic(Characteristic.On).setValue(data['FanSpeed'] > 0, undefined, 'fromMQTT');
             }   
         }
+
+        if (topic == that.topicTeleLWT) {
+            if (message == "Offline") {
+                that.state.reachable = false;
+                that.fanService.getCharacteristic(Characteristic.On).setValue(new Error("Unreachable"));
+            }
+            if (message == "Online") {
+                that.state.reachable = true;
+                that.fanService.getCharacteristic(Characteristic.On).setValue(that.state.speed);
+            }
+        }
     });
+
     this.client.subscribe(this.topicResultGet);
-    this.client.publish(this.topicFanspeedSet, '');
+    this.client.subscribe(this.topicTeleLWT);
 }
 
 MqttFanTasmotaAccessory.prototype.getServices = function() {
@@ -92,10 +105,20 @@ MqttFanTasmotaAccessory.prototype.getServices = function() {
 }
 
 MqttFanTasmotaAccessory.prototype.getOn = function(callback) {
+    if (! this.state.reachable) {
+        callback("no_response");
+        return;
+    }
+
     callback(null, this.state.power);
 }
 
 MqttFanTasmotaAccessory.prototype.setOn = function(value, callback, context) {
+    if (! this.state.reachable) {
+        callback("no_response");
+        return;
+    }
+
     if (this.state.power != value) {
         this.log('Setting power to ' + value);
         this.state.power = value;
@@ -113,6 +136,11 @@ MqttFanTasmotaAccessory.prototype.setOn = function(value, callback, context) {
 }
 
 MqttFanTasmotaAccessory.prototype.setSpeed = function(value, callback, context) {
+    if (! this.state.reachable) {
+        callback("no_response");
+        return;
+    }
+
     if (this.state.speed != value) {
         this.log("Setting speed to " + value);
         this.state.speed = value;
@@ -126,5 +154,10 @@ MqttFanTasmotaAccessory.prototype.setSpeed = function(value, callback, context) 
 }
 
 MqttFanTasmotaAccessory.prototype.getSpeed = function(callback) {
+    if (! this.state.reachable) {
+        callback("no_response");
+        return;
+    }
+
     callback(null, this.state.speed);
 }
