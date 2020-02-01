@@ -1,5 +1,5 @@
 # homebridge-mqtt-fan-tasmota
-Homebridge Plugin that Exposes the Fan on [Sonoff IFan02 / Tasmota MQTT](https://github.com/arendst/Sonoff-Tasmota/wiki/Sonoff-iFan02)
+Homebridge Plugin that Exposes the Fan on Sonoff IFan02/IFan03 using [Tasmota Firmware](https://github.com/arendst/Tasmota)
 
 
 # Installation
@@ -23,7 +23,9 @@ Fields:
 * "accessory": Must always be "mqtt-fan-tasmota" (required)
 * "name": Name visible in your homekit app (required)
 * "topic": The MQTT topic set up in Tasmota firware (required)
-* "url": The url of the MQTT broker (required)
+* "url": The url of the MQTT broker (required). 
 
-# To Do
-* Implement username and password MQTT authentication
+You can also specify different mqtt server parameters like username and password in the url:
+```
+"url" : "mqtt://username:password@ip-address:port"
+```
